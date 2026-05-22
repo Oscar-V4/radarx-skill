@@ -1,67 +1,43 @@
 # 📡 RadarX
 
-한국어 기본 소개 | 🔎 <a href="#english-readme">English README</a>
+<p align="center">
+  <b>한국어</b> |
+  <a href="docs/README.en.md">English</a> |
+  <a href="docs/README.zh-CN.md">简体中文</a>
+</p>
 
-RadarX는 Codex, Claude Code 같은 코딩 에이전트가 최신 AI 도구, 오픈소스 프로젝트, 에이전트 워크플로, 베스트 프랙티스, 프로젝트 아이디어의 live signal을 포착할 때 쓰는 리서치 스킬입니다.
+**RadarX는 최신 AI, 오픈소스, 소셜, 커뮤니티 신호를 잡아내는 레이더형 에이전트 스킬입니다.**  
+Threads, X, Reddit, Hacker News, GitHub, YouTube, Hugging Face, arXiv, Product Hunt 같은 live source를 훑되, 약한 바이럴 신호는 걸러내고 근거가 있는 후보만 작게 추려줍니다.
 
-핵심 목표는 "많이 찾기"가 아니라 "쓸모 있는 후보만 근거 기반으로 걸러내기"입니다. Threads, X 같은 소셜 신호는 빠른 발견에는 유용하지만 단독 근거로는 약하므로, GitHub, 공식 문서, 릴리즈 노트, Reddit/Hacker News 토론, 논문, 데모 같은 독립 근거와 함께 평가합니다.
+- 최신 AI 도구, 오픈소스 프로젝트, agentic workflow, best practice 신호를 찾습니다.
+- 로컬 Threads archive가 있으면 먼저 연결하고, 새 live signal과 분리해서 표시합니다.
+- GitHub, 공식 문서, Reddit/HN, YouTube, arXiv, Hugging Face, Product Hunt, 웹 검색을 계층적으로 사용합니다.
+- 후보를 관련성, 근거, 최신성, 새로움, 채택 신호, 안전성으로 점수화합니다.
+- 소셜에서 뜬 주장이라도 독립 근거가 약하면 `volatile` 또는 `rejected`로 낮춥니다.
+- 프로젝트 아이디어는 기존 대체재, MVP 경로, 평가 계획, 리스크 게이트까지 함께 봅니다.
 
-## 🔎 이런 상황에 씁니다
+## 빠른 설치
 
-- "Threads/X/GitHub/Reddit에서 최근 AI 워크플로 사례를 찾아줘."
-- "이 AI 공모전 아이디어를 구현하려고 하는데 필요한 정보를 조사해줘."
-- "요즘 뜨는 오픈소스 툴 중 실제로 쓸 만한 것만 걸러줘."
-- "내가 저장해둔 Threads 아카이브와 연결해서 새 후보를 찾아줘."
-- "소셜에서 화제인 도구가 진짜 쓸 만한지 회의적으로 검증해줘."
-
-## 🧭 주요 기능
-
-- 로컬 Threads 아카이브가 있으면 먼저 검색하고, 기존 관심사와 연결합니다.
-- GitHub, 공식 문서, Reddit, Hacker News, YouTube, Hugging Face, arXiv, Product Hunt, X, Threads, Bluesky, Mastodon, 웹 검색을 계층적으로 활용합니다.
-- 후보를 관련성, 근거, 최신성, 아카이브 대비 새로움, 채택 신호, 안전성으로 점수화합니다.
-- 단일 바이럴 포스트, 출처 불명 주장, 오래된 AI repo, 개인정보 계획 없는 민감 데이터 아이디어를 자동으로 낮게 평가합니다.
-- 프로젝트 아이디어 리서치에서는 기존 대체재, MVP 경로, 평가 계획, 리스크 게이트까지 함께 정리합니다.
-- 강한 후보, 불안정한 소셜 신호, 약해서 버린 후보, 다음 검색어를 분리해서 보고합니다.
-
-## 🧩 사용 조건: X/Threads 로그인이나 브라우저 자동화가 꼭 필요한가요?
-
-아니요. RadarX의 기본 사용에는 X/Threads 로그인, Playwright, browser-use, Chrome 자동화가 필수 아닙니다.
-
-기본 동작은 다음 공개/저마찰 근거만으로도 충분히 가능합니다.
-
-- GitHub repo, release, issue, discussion
-- 공식 문서, changelog, API 문서
-- Reddit, Hacker News, YouTube transcript, arXiv, Hugging Face, Product Hunt
-- 일반 웹 검색
-- 사용자의 로컬 Threads archive가 있을 경우 그 archive snapshot
-
-X/Threads 로그인은 선택 사항입니다. 로그인된 브라우저나 공식 API가 있으면 최신 소셜 신호를 더 잘 볼 수 있지만, 없으면 `site:x.com`, `site:threads.com`, GitHub/공식 문서/커뮤니티 검색으로 fallback합니다. 이 경우 답변에는 "X/Threads 직접 검색은 제한됨"이라고 명시하고, 약한 소셜 신호를 강한 근거처럼 포장하지 않습니다.
-
-Playwright, browser-use, Codex Chrome 같은 브라우저 자동화도 선택 사항입니다. 동적 웹페이지, 로그인된 X/Threads, 브라우저 세션이 필요한 조사를 할 때만 도움이 됩니다. 일반적인 리서치 브리프, 오픈소스 탐색, 공식 문서 검증, GitHub 후보 점수화에는 없어도 됩니다.
-
-민감한 세션 쿠키나 토큰을 export해서 쓰는 방식은 권장하지 않습니다. RadarX는 "가능한 공개 근거 먼저, 로그인/유료/브라우저 의존은 보조 adapter"라는 원칙으로 설계되어 있습니다.
-
-## 🗂️ 레포 구조
+친구에게 공유할 때는 아래 프롬프트를 그대로 복사해서 Codex, Claude Code, Antigravity 같은 에이전트에게 붙여넣으면 됩니다.
 
 ```text
-skills/radarx/
-  SKILL.md
-  agents/openai.yaml
-  references/
-    attention-policy.md
-    output-contract.md
-    research-brief-playbook.md
-    source-playbook.md
-  scripts/
-    score_candidates.py
-install.sh
+이 GitHub repo를 확인해서 RadarX 에이전트 스킬을 설치해줘:
+https://github.com/Oscar-V4/radarx-skill
+
+현재 네가 실행 중인 에이전트 환경을 감지해서 설치해.
+- Codex 계열이면 ~/.codex/skills/radarx 에 설치해.
+- Claude Code 계열이면 ~/.claude/skills/radarx 에 설치해.
+- 다른 에이전트면 SKILL.md 기반 스킬 폴더를 지원하는지 확인하고, 가장 가까운 사용자 스킬 위치에 설치해.
+- 전용 설치기가 있으면 사용하고, 없으면 repo를 clone한 뒤 skills/radarx 폴더를 사용자 스킬 디렉터리에 복사해.
+
+설치 후 skills/radarx/SKILL.md와 README.md를 읽고,
+1. 언제 $radarx를 쓰면 좋은지
+2. 어떤 식으로 말하면 좋은지
+3. 첫 테스트 프롬프트 3개
+를 간단히 알려줘.
 ```
 
-## ⚡ 빠른 설치
-
-### Codex
-
-Codex에 `skill-installer`가 있으면 GitHub에서 바로 설치할 수 있습니다.
+직접 설치할 때:
 
 ```bash
 python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
@@ -69,236 +45,64 @@ python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-githu
   --path skills/radarx
 ```
 
-설치 후 Codex를 재시작하면 스킬이 인식됩니다.
+설치 후 에이전트 앱을 재시작하면 `$radarx`로 호출할 수 있습니다.
 
-수동 설치:
+## 언제 쓰면 좋은가
 
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-mkdir -p ~/.codex/skills
-cp -R radarx-skill/skills/radarx ~/.codex/skills/radarx
-```
+| 상황 | 이렇게 말하면 됩니다 |
+|---|---|
+| 최신 AI/오픈소스 흐름을 보고 싶을 때 | `$radarx 최근 AI 음성 에이전트에 쓸 만한 오픈소스 툴을 찾아줘.` |
+| 소셜에서 화제인 도구가 진짜인지 보고 싶을 때 | `$radarx X/Threads에서 뜨는 이 도구가 실제로 쓸 만한지 근거 기반으로 검증해줘.` |
+| 공모전/해커톤 아이디어를 조사할 때 | `$radarx 이 AI 공모전 아이디어에 필요한 정보, 기존 대체재, MVP 경로를 조사해줘.` |
+| 내 archive와 연결해 새 후보를 찾고 싶을 때 | `$radarx 내 Threads archive와 연결해서 비슷하지만 새로운 AI workflow 사례를 찾아줘.` |
+| 약한 링크를 많이 받기 싫을 때 | `$radarx 강한 후보만 3개 이하로 추리고, 버린 후보와 이유도 알려줘.` |
+| live social coverage가 중요할 때 | `$radarx social-heavy 모드로 X, Threads, Reddit, HN 신호를 먼저 훑어줘.` |
 
-설치 스크립트 사용:
+## 결과물은 어떻게 나오나
 
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-cd radarx-skill
-./install.sh --target codex
-```
+RadarX는 보통 아래처럼 답합니다.
 
-### Claude Code
+- **Intent**: 사용자가 풀려는 문제와 좋은 후보의 기준
+- **Attention Mode**: quick, balanced, deep, social-heavy, archive-first 중 선택
+- **Archive Connections**: 기존 archive와의 연결점
+- **Strong Finds**: 근거가 강한 후보와 URL
+- **Volatile Social Signals**: 아직 독립 검증이 약한 live/social 신호
+- **Rejected Or Weak Signals**: 버린 후보와 이유
+- **Next Searches**: 다음에 더 파볼 검색어, 커뮤니티, 문서
 
-Claude Code는 개인 스킬을 `~/.claude/skills/<skill-name>/SKILL.md`에서, 프로젝트 스킬을 `.claude/skills/<skill-name>/SKILL.md`에서 인식합니다. 공식 문서: <https://docs.claude.com/en/docs/claude-code/skills>
+프로젝트 아이디어나 MVP 조사에서는 기존 대체재, build path, 평가 계획, privacy/safety risk gate까지 확장합니다.
 
-개인 스킬로 설치:
+## 에이전트 호환성
 
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-mkdir -p ~/.claude/skills
-cp -R radarx-skill/skills/radarx ~/.claude/skills/radarx
-```
+이 repo는 `SKILL.md` 기반 에이전트 스킬 구조로 패키징되어 있습니다. Codex와 Claude Code처럼 사용자 스킬 폴더를 읽는 에이전트에서는 그대로 설치할 수 있고, 다른 에이전트에서도 `skills/radarx/SKILL.md`를 읽게 하면 같은 지침으로 활용할 수 있습니다.
 
-설치 스크립트 사용:
+에이전트마다 스킬 자동 로딩 규칙은 다를 수 있으므로, 가장 확실한 방식은 위의 “빠른 설치” 프롬프트를 에이전트에게 붙여넣고 현재 환경에 맞게 설치하게 하는 것입니다.
 
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-cd radarx-skill
-./install.sh --target claude
-```
+## 사용 조건
 
-설치 후 Claude Code를 재시작하세요.
+RadarX는 X/Threads 로그인, Playwright, browser-use, Chrome 자동화, 유료 scraping API가 없어도 동작합니다. 가능한 공개 근거를 먼저 쓰고, 로그인/유료/브라우저 의존 source는 선택적 adapter로 취급합니다.
 
-## 📡 사용 예시
+민감한 세션 쿠키나 토큰을 export해서 쓰는 방식은 권장하지 않습니다. 어떤 source가 제한되면 답변에 한계를 표시하고 공개 fallback으로 진행합니다.
 
-Codex:
+## 저장소 구조
 
 ```text
-$radarx 실시간 AI 음성 에이전트에 쓸 만한 최근 오픈소스 툴을 찾아줘.
+radarx-skill/
+├── README.md
+├── docs/
+│   ├── README.en.md
+│   └── README.zh-CN.md
+├── install.sh
+└── skills/
+    └── radarx/
+        ├── SKILL.md
+        ├── agents/
+        │   └── openai.yaml
+        ├── references/
+        │   ├── attention-policy.md
+        │   ├── output-contract.md
+        │   ├── research-brief-playbook.md
+        │   └── source-playbook.md
+        └── scripts/
+            └── score_candidates.py
 ```
-
-Claude Code:
-
-```text
-Use radarx to research my AI hackathon idea and reject weak social hype.
-```
-
-한국어로 자연스럽게 요청해도 됩니다.
-
-```text
-학교 AI 공모전에 낼 청각장애 학우용 음성인식+AI툴 아이디어를 조사해줘.
-```
-
-## 📌 기본 출력 형식
-
-보통 다음 항목으로 답합니다.
-
-- Intent: 사용자가 풀려는 문제와 좋은 후보의 기준
-- Attention Mode: quick, balanced, deep, social-heavy, archive-first 중 선택
-- Archive Connections: 기존 아카이브와의 연결점
-- Baseline Reality: 프로젝트 아이디어일 때 기존 제품/대체재
-- Strong Finds: 근거가 강한 후보
-- Recommended Build Path: MVP, v1.5, v2/defer
-- Evaluation Plan: 정확도, 지연시간, 사용자 검증, 실패 라벨
-- Risk Gates: 개인정보, 동의, 접근성, 안전성, 비용, 정책 리스크
-- Volatile Social Signals: 아직 검증이 약한 소셜 신호
-- Rejected Or Weak Signals: 버린 후보와 이유
-- Next Searches: 다음에 더 파볼 검색어/커뮤니티/문서
-
-## 🧠 에이전트를 위한 가이드라인
-
-이 스킬을 사용하는 에이전트는 다음 순서를 따르는 것이 좋습니다.
-
-1. `skills/radarx/SKILL.md`를 먼저 읽습니다.
-2. `references/attention-policy.md`에서 attention mode를 고릅니다.
-3. "이걸 만들고 싶다", "필요한 정보를 조사해줘" 유형이면 `references/research-brief-playbook.md`를 읽습니다.
-4. 로컬 Threads 아카이브가 있으면 먼저 검색하되, 아카이브 근거와 최신 라이브 근거를 분리해서 표시합니다.
-5. X/Threads보다 공식 문서, GitHub repo, 릴리즈 노트, 재현 가능한 데모, 고신뢰 커뮤니티 토론을 우선합니다.
-6. X, Threads, Bluesky, Mastodon 결과는 독립 근거가 없으면 volatile signal로만 취급합니다.
-7. 후보가 많거나 판단이 애매하면 `scripts/score_candidates.py`로 점수화합니다.
-8. A/B 후보에는 URL을 반드시 붙입니다.
-9. 출처 불명, 약한 근거, 오래된 repo, 개인정보 계획 부재, 기존 대체재 검토 부재는 점수를 낮춥니다.
-10. 강한 후보가 없으면 억지로 채우지 말고 "강한 후보 없음"이라고 말합니다.
-11. X/Threads 로그인이나 브라우저 자동화가 없으면 공개 검색 fallback을 쓰고, 그 한계를 답변에 명시합니다.
-
-## ⚖️ 점수화 도우미
-
-```bash
-python3 skills/radarx/scripts/score_candidates.py --format markdown <<'JSON'
-{
-  "candidates": [
-    {
-      "name": "Example repo-backed candidate",
-      "relevance": 28,
-      "evidence": 18,
-      "freshness": 14,
-      "novelty": 12,
-      "adoption": 8,
-      "safety": 8,
-      "external_evidence": true
-    }
-  ]
-}
-JSON
-```
-
-## 📄 라이선스
-
-MIT
-
-<details id="english-readme">
-<summary>English README</summary>
-
-# 📡 RadarX
-
-Archive-aware, evidence-gated research skill for finding useful AI tools, open-source projects, agentic workflows, best practices, and project-idea signals across live social/community sources and reliable public sources.
-
-RadarX is designed for agents that need to answer questions like:
-
-- "Find recent AI workflow examples from Threads/X/GitHub/Reddit."
-- "I want to build this AI project. What information do I need?"
-- "Scout open-source tools and reject noisy social hype."
-- "Connect new findings to my existing personal Threads archive."
-
-The skill favors a small number of useful, source-backed candidates over broad recall. It treats X/Threads as volatile discovery surfaces, not standalone proof.
-
-## 🔎 What It Does
-
-- Searches local archive context first when available.
-- Fans out to GitHub, official docs, Reddit, Hacker News, YouTube, Hugging Face, arXiv, Product Hunt, X, Threads, Bluesky, Mastodon, and web sources.
-- Scores candidates by relevance, evidence, freshness, novelty, adoption, and safety.
-- Downgrades weak social-only signals, stale repos, missing provenance, and sensitive-data ideas without privacy plans.
-- Produces structured research briefs with strong finds, volatile signals, rejected weak signals, and next searches.
-- Handles project-idea research with baseline checks, MVP paths, evaluation plans, and risk gates.
-
-## 🧩 Requirements And Optional Adapters
-
-RadarX does not require X/Threads login, Playwright, browser-use, or Chrome automation for normal use.
-
-The core workflow works with public and low-friction sources:
-
-- GitHub repositories, releases, issues, and discussions
-- Official docs, changelogs, and API docs
-- Reddit, Hacker News, YouTube transcripts, arXiv, Hugging Face, Product Hunt
-- General web search
-- A local Threads archive snapshot, when available
-
-X/Threads login is optional. A logged-in browser or official API can improve fresh social discovery, but RadarX should fall back to public search such as `site:x.com`, `site:threads.com`, GitHub, official docs, and community sources when those adapters are unavailable.
-
-Playwright, browser-use, and Codex Chrome are optional adapters for dynamic or logged-in pages. They are not required for ordinary research briefs, open-source scouting, official-doc verification, or candidate scoring.
-
-Do not export cookies or tokens just to use RadarX. If a source is unavailable, say so and continue with public evidence.
-
-## ⚡ Quick Install
-
-### Codex
-
-If your Codex installation includes `skill-installer`, install directly from GitHub:
-
-```bash
-python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py \
-  --repo Oscar-V4/radarx-skill \
-  --path skills/radarx
-```
-
-Then restart Codex so the new skill is discovered.
-
-Manual install:
-
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-mkdir -p ~/.codex/skills
-cp -R radarx-skill/skills/radarx ~/.codex/skills/radarx
-```
-
-Or use the installer script:
-
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-cd radarx-skill
-./install.sh --target codex
-```
-
-### Claude Code
-
-Claude Code discovers personal skills from `~/.claude/skills/<skill-name>/SKILL.md` and project skills from `.claude/skills/<skill-name>/SKILL.md`. See the official Claude Code skills docs: <https://docs.claude.com/en/docs/claude-code/skills>
-
-Install as a personal Claude Code skill:
-
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-mkdir -p ~/.claude/skills
-cp -R radarx-skill/skills/radarx ~/.claude/skills/radarx
-```
-
-Or use the installer script:
-
-```bash
-git clone https://github.com/Oscar-V4/radarx-skill.git
-cd radarx-skill
-./install.sh --target claude
-```
-
-Restart Claude Code after installation.
-
-## 🧠 Agent Guidelines
-
-When using this skill as an AI agent:
-
-1. Load `skills/radarx/SKILL.md` first.
-2. Use `references/attention-policy.md` to choose quick, balanced, deep, social-heavy, or archive-first mode.
-3. For "I want to build..." or "what information do I need?" prompts, load `references/research-brief-playbook.md`.
-4. Search local archive snapshots first when available, but label them as archive context rather than live evidence.
-5. Prefer official docs, GitHub repos, release notes, reproducible demos, and high-signal community discussions before X/Threads.
-6. Treat X/Threads/Bluesky/Mastodon as volatile candidate discovery unless independent evidence exists.
-7. Run `scripts/score_candidates.py` for larger candidate sets or when a deterministic ranking is useful.
-8. Include URLs for A/B candidates.
-9. Downgrade candidates with missing provenance, weak evidence, stale activity, privacy gaps, or no baseline comparison.
-10. It is acceptable to report that no strong live candidates were found.
-11. If X/Threads login or browser automation is unavailable, use public fallback sources and label the limitation.
-
-## 📄 License
-
-MIT
-
-</details>

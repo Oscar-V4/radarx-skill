@@ -1,4 +1,8 @@
-# 📡 RadarX
+<p align="center">
+  <img src="assets/radarx-logo.svg" alt="RadarX logo" width="132">
+</p>
+
+# RadarX
 
 <p align="center">
   <b>한국어</b> |
@@ -6,7 +10,7 @@
   <a href="docs/README.zh-CN.md">简体中文</a>
 </p>
 
-**RadarX는 최신 AI, 오픈소스, 소셜, 커뮤니티 신호를 잡아내는 레이더형 에이전트 스킬입니다.**  
+**RadarX는 최신 AI, 오픈소스, 소셜, 커뮤니티 신호를 잡아내는 레이더형 리서치 스킬입니다.**  
 Threads, X, Reddit, Hacker News, GitHub, YouTube, Hugging Face, arXiv, Product Hunt 같은 live source를 훑되, 약한 바이럴 신호는 걸러내고 근거가 있는 후보만 작게 추려줍니다.
 
 - 최신 AI 도구, 오픈소스 프로젝트, agentic workflow, best practice 신호를 찾습니다.

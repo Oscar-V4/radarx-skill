@@ -1,4 +1,4 @@
-# 📡 RadarX
+# RadarX
 
 <p align="center">
   <a href="../README.md">한국어</a> |
@@ -6,7 +6,7 @@
   <b>简体中文</b>
 </p>
 
-**RadarX 是一个雷达型 Agent Skill，用来发现最新的 AI、开源、社交和社区信号。**  
+**RadarX 是一个雷达型研究 Skill，用来发现最新的 AI、开源、社交和社区信号。**  
 它会扫描 Threads、X、Reddit、Hacker News、GitHub、YouTube、Hugging Face、arXiv、Product Hunt 和网页等 live sources，同时过滤弱 hype，只报告有价值、有证据的候选。
 
 - 寻找最新 AI 工具、开源项目、agentic workflow、best practice 和项目 idea 信号。

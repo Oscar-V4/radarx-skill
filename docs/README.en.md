@@ -1,4 +1,4 @@
-# 📡 RadarX
+# RadarX
 
 <p align="center">
   <a href="../README.md">한국어</a> |
@@ -6,7 +6,7 @@
   <a href="README.zh-CN.md">简体中文</a>
 </p>
 
-**RadarX is a radar-style agent skill for finding fresh AI, open-source, social, and community signals.**  
+**RadarX is a radar-style research skill for finding fresh AI, open-source, social, and community signals.**  
 It scans live sources such as Threads, X, Reddit, Hacker News, GitHub, YouTube, Hugging Face, arXiv, Product Hunt, and the web, then rejects weak hype and reports only useful, evidence-backed candidates.
 
 - Finds recent AI tools, open-source projects, agentic workflows, best practices, and project-idea signals.

@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">RadarX logo</title>
+  <desc id="desc">A minimal X mark with signal arcs for RadarX.</desc>
+  <rect width="512" height="512" rx="112" fill="#F7FAFC"/>
+  <circle cx="256" cy="256" r="164" stroke="#E2E8F0" stroke-width="18"/>
+  <path d="M118 256C118 179.8 179.8 118 256 118" stroke="#101820" stroke-width="22" stroke-linecap="round"/>
+  <path d="M394 256C394 332.2 332.2 394 256 394" stroke="#101820" stroke-width="22" stroke-linecap="round"/>
+  <path d="M160 352C112 304 112 208 160 160" stroke="#14B8D8" stroke-width="20" stroke-linecap="round"/>
+  <path d="M352 160C400 208 400 304 352 352" stroke="#14B8D8" stroke-width="20" stroke-linecap="round"/>
+  <path d="M174 174L338 338" stroke="#101820" stroke-width="46" stroke-linecap="round"/>
+  <path d="M338 174L174 338" stroke="#101820" stroke-width="46" stroke-linecap="round"/>
+  <path d="M214 256H298" stroke="#F7FAFC" stroke-width="38" stroke-linecap="round"/>
+  <path d="M256 214V298" stroke="#F7FAFC" stroke-width="38" stroke-linecap="round"/>
+  <circle cx="256" cy="256" r="20" fill="#14B8D8"/>
+</svg>

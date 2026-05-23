@@ -1,9 +1,8 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/radarx-wordmark-dark.svg">
-    <img src="assets/radarx-wordmark-light.svg" alt="RadarX" width="460">
-  </picture>
+  <img src="assets/radarx-logo.png" alt="RadarX logo" width="172">
 </p>
+
+# RadarX
 
 <p align="center">
   <b>한국어</b> |

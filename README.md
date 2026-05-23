@@ -76,18 +76,6 @@ RadarX는 보통 아래처럼 답합니다.
 
 프로젝트 아이디어나 MVP 조사에서는 기존 대체재, build path, 평가 계획, privacy/safety risk gate까지 확장합니다.
 
-## 에이전트 호환성
-
-이 repo는 `SKILL.md` 기반 에이전트 스킬 구조로 패키징되어 있습니다. Codex와 Claude Code처럼 사용자 스킬 폴더를 읽는 에이전트에서는 그대로 설치할 수 있고, 다른 에이전트에서도 `skills/radarx/SKILL.md`를 읽게 하면 같은 지침으로 활용할 수 있습니다.
-
-에이전트마다 스킬 자동 로딩 규칙은 다를 수 있으므로, 가장 확실한 방식은 위의 “빠른 설치” 프롬프트를 에이전트에게 붙여넣고 현재 환경에 맞게 설치하게 하는 것입니다.
-
-## 사용 조건
-
-RadarX는 X/Threads 로그인, Playwright, browser-use, Chrome 자동화, 유료 scraping API가 없어도 동작합니다. 가능한 공개 근거를 먼저 쓰고, 로그인/유료/브라우저 의존 source는 선택적 adapter로 취급합니다.
-
-민감한 세션 쿠키나 토큰을 export해서 쓰는 방식은 권장하지 않습니다. 어떤 source가 제한되면 답변에 한계를 표시하고 공개 fallback으로 진행합니다.
-
 ## 스킬 전문
 
 <details>
@@ -213,6 +201,18 @@ Good outputs are small, ranked, skeptical, and source-backed. Prefer three stron
 ````
 
 </details>
+
+## 에이전트 호환성
+
+이 repo는 `SKILL.md` 기반 에이전트 스킬 구조로 패키징되어 있습니다. Codex와 Claude Code처럼 사용자 스킬 폴더를 읽는 에이전트에서는 그대로 설치할 수 있고, 다른 에이전트에서도 `skills/radarx/SKILL.md`를 읽게 하면 같은 지침으로 활용할 수 있습니다.
+
+에이전트마다 스킬 자동 로딩 규칙은 다를 수 있으므로, 가장 확실한 방식은 위의 “빠른 설치” 프롬프트를 에이전트에게 붙여넣고 현재 환경에 맞게 설치하게 하는 것입니다.
+
+## 사용 조건
+
+RadarX는 X/Threads 로그인, Playwright, browser-use, Chrome 자동화, 유료 scraping API가 없어도 동작합니다. 가능한 공개 근거를 먼저 쓰고, 로그인/유료/브라우저 의존 source는 선택적 adapter로 취급합니다.
+
+민감한 세션 쿠키나 토큰을 export해서 쓰는 방식은 권장하지 않습니다. 어떤 source가 제한되면 답변에 한계를 표시하고 공개 fallback으로 진행합니다.
 
 ## 저장소 구조
 

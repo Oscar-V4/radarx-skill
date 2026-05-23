@@ -22,7 +22,7 @@ Threads, X, Reddit, Hacker News, GitHub, YouTube, Hugging Face, arXiv, Product H
 
 ## 빠른 설치
 
-친구에게 공유할 때는 아래 프롬프트를 그대로 복사해서 Codex, Claude Code, Antigravity 같은 에이전트에게 붙여넣으면 됩니다.
+아래 프롬프트를 그대로 복사해서 Codex, Claude Code, Antigravity 같은 에이전트에게 붙여넣으세요.
 
 ```text
 이 GitHub repo를 확인해서 RadarX 에이전트 스킬을 설치해줘:
@@ -89,8 +89,6 @@ RadarX는 X/Threads 로그인, Playwright, browser-use, Chrome 자동화, 유료
 민감한 세션 쿠키나 토큰을 export해서 쓰는 방식은 권장하지 않습니다. 어떤 source가 제한되면 답변에 한계를 표시하고 공개 fallback으로 진행합니다.
 
 ## 스킬 전문
-
-표준 설치 명령은 `skills/radarx` 폴더만 설치합니다. 따라서 이 README가 길어져도 설치된 스킬이 자동으로 더 무거워지지는 않습니다. 에이전트가 실제로 스킬로 읽는 핵심 파일은 `skills/radarx/SKILL.md`이며, `references/`와 `scripts/`는 필요할 때만 사용됩니다.
 
 <details>
 <summary><code>skills/radarx/SKILL.md</code> 전문 보기</summary>

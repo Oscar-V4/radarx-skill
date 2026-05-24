@@ -7,13 +7,15 @@
 </p>
 
 **RadarX is a radar-style research skill for finding fresh AI, open-source, social, and community signals.**  
-It scans live sources such as Threads, X, Reddit, Hacker News, GitHub, YouTube, Hugging Face, arXiv, Product Hunt, and the web, then rejects weak hype and reports only useful, evidence-backed candidates.
+It scans live sources such as Threads, X, Reddit, Hacker News, GitHub, YouTube, Hugging Face, arXiv, Product Hunt, and the web, then uses a public access ladder and provenance labels to separate validated recommendations from weak but useful trend signals.
 
 - Finds recent AI tools, open-source projects, agentic workflows, best practices, and project-idea signals.
 - Connects to a local Threads archive when available, while keeping archive context separate from live evidence.
 - Uses GitHub, official docs, Reddit/HN, YouTube, arXiv, Hugging Face, Product Hunt, and web search in source layers.
+- Tries reader-proxy, public APIs, RSS/feed, metadata, cache/archive, and optional browser sessions when normal browsing fails.
 - Scores candidates by relevance, evidence, freshness, novelty, adoption, and safety.
-- Downgrades social-only claims unless independent evidence exists.
+- Separates social-only, reader-proxy-only, metadata-only, cache/archive, and login-required leads from strong recommendations.
+- Applies access-quality caps so weakly accessed material is not over-promoted.
 - Expands project-idea research into baselines, MVP paths, evaluation plans, and risk gates.
 
 ## Quick Install
@@ -64,8 +66,10 @@ RadarX usually returns:
 - **Intent**: the problem and what counts as a useful candidate
 - **Attention Mode**: quick, balanced, deep, social-heavy, or archive-first
 - **Archive Connections**: related saved/archive context
+- **Access Coverage**: available archive, public web, reader-proxy, public API, browser session, or paid API coverage
 - **Strong Finds**: source-backed candidates and URLs
-- **Volatile Social Signals**: live/social signals that still need verification
+- **Trending Signals**: fresh high-fit signals that are still weakly verified
+- **Access-Limited Leads**: partial, reader-proxy-only, metadata-only, cache/archive, or login-required leads
 - **Rejected Or Weak Signals**: what was ignored and why
 - **Next Searches**: queries, communities, docs, or authors to explore next
 
@@ -77,6 +81,8 @@ This repo is packaged as a `SKILL.md`-based agent skill. Agents such as Codex an
 
 ## Requirements
 
-RadarX does not require X/Threads login, Playwright, browser-use, Chrome automation, or paid scraping APIs for normal use. It uses public evidence first and treats logged-in, paid, or browser-dependent sources as optional adapters.
+RadarX does not require X/Threads login, Playwright, browser-use, Chrome automation, or paid scraping APIs for normal use. It uses public evidence first and treats logged-in, paid, or browser-dependent sources as optional enhanced adapters.
+
+When browser plugins or logged-in sessions are available, RadarX can inspect more live/social material, but results should still carry `access_method`, `access_quality`, and `provenance_note` labels.
 
 Do not export cookies or tokens just to use RadarX. If a source is unavailable, the skill should state the limitation and continue with public fallback evidence.

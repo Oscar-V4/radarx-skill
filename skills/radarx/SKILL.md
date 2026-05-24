@@ -17,11 +17,17 @@ Use available low-friction sources first: local archive snapshots, GitHub, offic
 
 If X/Threads login or browser automation is unavailable, use public fallback searches such as `site:x.com` or `site:threads.com`, then state the limitation in the report. Do not ask users to export cookies or tokens just to run this skill.
 
+When a user has browser plugins, logged-in sessions, Playwright, or paid/social APIs available, RadarX may use them as enhanced adapters. They expand coverage but do not replace provenance labels, source skepticism, or the public fallback path.
+
 ## Core Rule
 
 Maximize useful, archive-aware, evidence-backed discovery by aggressively rejecting weak live social signals.
 
 Never let X/Threads virality override weak relevance or weak evidence. Treat "no strong live candidates found" as a successful outcome.
+
+Always include a compact `Trending Signals` section in the report. Use it for 0-3 fresh, highly relevant candidates that may be viral, early, or weakly verified but are worth the user's attention. Label them plainly, for example `new`, `viral-risk`, `weak-verification`, `social-only`, `access-unclear`, or `watch`. Do not mix these with `Strong Finds`, and do not present them as validated recommendations.
+
+For every serious candidate, preserve access provenance: how the content was reached, whether it was full text or partial metadata, and what would remain if the social/browser view disappeared. Use provenance to decide whether the candidate belongs in `Strong Finds`, `Trending Signals`, or `Access-Limited Leads`.
 
 ## Workflow
 
@@ -49,20 +55,23 @@ Never let X/Threads virality override weak relevance or weak evidence. Treat "no
    - Reliable public layer: GitHub, official docs, Reddit, Hacker News, YouTube transcripts, reputable web search.
    - For product or project ideas, identify incumbent baselines before recommending a build path.
    - Optional live social layer: X, Threads, Bluesky, Mastodon, Product Hunt, TikTok/Instagram only when available and appropriate.
+   - For blocked or dynamic public URLs, follow the Public Web Access Ladder in `references/source-playbook.md` before giving up or escalating to browser automation.
    - Paid or credentialed sources must stay optional and best-effort unless the user explicitly requests setup.
    - Load `references/source-playbook.md` for source-specific tactics and fallback order.
 
 5. Score candidates before synthesizing.
    - Use the Evidence Ladder and Candidate Judge in `references/attention-policy.md`.
+   - Apply access-quality caps from `references/attention-policy.md` so reader-proxy, metadata-only, cache/archive, browser-session-only, and login-required leads are not over-promoted.
    - For larger result sets, write a temporary JSON candidate list outside project repos and run `scripts/score_candidates.py`.
    - Only A/B candidates belong in the main answer.
 
 6. Run the skeptic pass.
    - Ask whether each strong candidate is just promotion, SEO, a single viral post, stale, already in the archive, unsupported by code/docs, or unrelated to the user's actual problem.
    - Downgrade or reject anything that fails.
+   - Preserve fresh high-fit items as `Trending Signals` when they fail validation but still look useful to know about.
 
 7. Report using the output contract.
-   - Separate `Strong Finds`, `Volatile Social Signals`, `Archive Connections`, `Rejected/Weak Signals`, and `Next Searches`.
+   - Separate `Strong Finds`, `Trending Signals`, `Access-Limited Leads`, `Archive Connections`, `Rejected/Weak Signals`, and `Next Searches`.
    - For project-idea research, use the research brief form in `references/output-contract.md`.
    - Cite URLs for every candidate.
    - Load `references/output-contract.md` for the report shape.
@@ -106,6 +115,8 @@ Do not do these unless the user explicitly asks:
 ## Good Outputs
 
 Good outputs are small, ranked, skeptical, and source-backed. Prefer three strong candidates over twenty weak links. When live social evidence is thin, say so directly and recommend better query/source angles.
+
+Good outputs still surface a tiny number of relevant trend signals, even when evidence is weak, as long as they are clearly labeled and separated from recommendations.
 
 ## Resources
 

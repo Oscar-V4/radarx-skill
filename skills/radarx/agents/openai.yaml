@@ -1,4 +1,4 @@
 interface:
   display_name: "RadarX"
-  short_description: "Archive-aware live research scout"
-  default_prompt: "Use $radarx to find recent AI workflow, open-source, and project-idea research candidates with strict evidence gates."
+  short_description: "Archive-aware trend scout with access provenance"
+  default_prompt: "Use $radarx to find recent AI workflow, open-source, and project-idea research candidates with public access fallbacks, trend labels, and strict evidence gates."

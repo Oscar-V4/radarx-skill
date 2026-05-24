@@ -35,6 +35,40 @@ For project-idea research, spend early attention on baselines and evaluation bef
 
 X/Threads can reveal fresh candidates, but they start at tier 3. Promote them only when independent evidence exists.
 
+## Access Quality
+
+Access quality is separate from source credibility. A high-quality source reached through a weak access path still needs provenance labels.
+
+Use these labels while scouting:
+
+- `full-original`: original page/API/docs/repo directly available.
+- `full-public-api`: structured public endpoint, such as Reddit JSON, HN API, GitHub, arXiv, Bluesky, Mastodon, npm, PyPI, or YouTube metadata/transcript.
+- `full-reader-proxy`: reader proxy such as `r.jina.ai` returned substantial text.
+- `full-browser-session`: logged-in or enhanced browser session returned substantial text.
+- `partial-metadata`: only OGP, JSON-LD, title, snippet, or other partial metadata.
+- `cache-archive`: AMP cache, archive.today, Wayback, or another cache copy.
+- `login-required`: relevant candidate identified but content requires auth, paywall, private state, or unavailable session.
+- `failed`: no usable content.
+
+Upgrade path:
+
+- `full-original` and `full-public-api` can support `Strong Finds` when source quality is high.
+- `full-reader-proxy` and `full-browser-session` can support `Strong Finds` only with independent corroboration.
+- `partial-metadata`, `cache-archive`, and `login-required` usually belong in `Access-Limited Leads` or `Trending Signals`.
+- `failed` belongs in `Rejected Or Weak Signals` unless the failed access itself is useful to report.
+
+## Trending Signals
+
+Every report should include a short `Trending Signals` section. This is not a new mode; it is a small default catchment for fresh, high-fit items that are too early or weakly verified for `Strong Finds`.
+
+Rules:
+
+- Include 0-3 items.
+- Prefer direct fit to the user's request over broad virality.
+- Use plain labels such as `new`, `viral-risk`, `weak-verification`, `social-only`, `access-unclear`, or `watch`.
+- Keep social-only or single-post items out of `Strong Finds` unless independently verified.
+- For high-impact domains, make the caveat stronger rather than deleting every trend signal.
+
 ## Candidate Judge
 
 Score each serious candidate on a 100-point scale:
@@ -65,6 +99,10 @@ Grades:
 - Human-impact recommendations without user-validation or evaluation plan cannot exceed B.
 - Sensitive-data candidates without a privacy, consent, and deletion plan cannot exceed C.
 - Project ideas without incumbent baseline checks cannot exceed B.
+- Reader-proxy-only or browser-session-only candidates without independent evidence cannot exceed B.
+- Metadata-only or cache/archive-only candidates cannot exceed C unless the task is explicitly archival.
+- Login-required candidates with no readable body cannot exceed C and usually belong in `Access-Limited Leads`.
+- Missing access provenance cannot exceed C.
 
 ## Rejection Checklist
 
@@ -90,3 +128,5 @@ Before answering, ask:
 - Is this actually new relative to the user's archive?
 - For human-impact domains, what affected-user evidence or validation plan is missing?
 - For project ideas, which incumbent already solves most of the problem?
+- What remains true if the reader-proxy result, browser session, or social post disappears?
+- Is the access method strong enough for the section where the candidate is being placed?

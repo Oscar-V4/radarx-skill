@@ -6,7 +6,9 @@ Each candidate may include:
   name, url, sources, relevance, evidence, freshness, novelty, adoption, safety,
   volatile_social_only, external_evidence, missing_provenance, stale_fast_moving,
   human_impact_no_user_validation, sensitive_data_no_privacy_plan,
-  project_idea_no_baseline_check.
+  project_idea_no_baseline_check, access_quality, access_method,
+  reader_proxy_only, browser_session_only, metadata_only, cache_archive_only,
+  login_required, access_limited.
 """
 
 from __future__ import annotations
@@ -45,6 +47,17 @@ def grade(total: float) -> str:
     return "Reject"
 
 
+def cap_total(total: float, cap: float, reason: str, cap_reasons: list[str]) -> float:
+    if total > cap:
+        cap_reasons.append(reason)
+        return cap
+    return total
+
+
+def normalize_access(value: Any) -> str:
+    return str(value or "").strip().lower().replace("_", "-")
+
+
 def score_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
     scores = {key: clamp_score(candidate.get(key), maximum) for key, maximum in MAXIMA.items()}
     total = sum(scores.values())
@@ -57,28 +70,50 @@ def score_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
     human_impact_no_user_validation = bool(candidate.get("human_impact_no_user_validation"))
     sensitive_data_no_privacy_plan = bool(candidate.get("sensitive_data_no_privacy_plan"))
     project_idea_no_baseline_check = bool(candidate.get("project_idea_no_baseline_check"))
+    access_quality = normalize_access(candidate.get("access_quality"))
+    access_method = normalize_access(candidate.get("access_method"))
 
-    if volatile and not external_evidence and total > 79:
-        total = 79
-        cap_reasons.append("volatile social-only candidate without external evidence cannot exceed B")
-    if missing_provenance and total > 64:
-        total = 64
-        cap_reasons.append("missing provenance cannot exceed C")
-    if stale_fast_moving and total > 64:
-        total = 64
-        cap_reasons.append("stale fast-moving ecosystem candidate cannot exceed C")
-    if human_impact_no_user_validation and total > 79:
-        total = 79
-        cap_reasons.append("human-impact candidate without user validation cannot exceed B")
-    if sensitive_data_no_privacy_plan and total > 64:
-        total = 64
-        cap_reasons.append("sensitive-data candidate without privacy plan cannot exceed C")
-    if project_idea_no_baseline_check and total > 79:
-        total = 79
-        cap_reasons.append("project idea without incumbent baseline check cannot exceed B")
+    reader_proxy_only = bool(candidate.get("reader_proxy_only")) or access_quality == "full-reader-proxy" or access_method == "reader-proxy"
+    browser_session_only = bool(candidate.get("browser_session_only")) or access_quality == "full-browser-session" or access_method == "browser-session"
+    metadata_only = bool(candidate.get("metadata_only")) or access_quality == "partial-metadata" or access_method == "metadata-only"
+    cache_archive_only = bool(candidate.get("cache_archive_only")) or access_quality == "cache-archive" or access_method == "cache-archive"
+    login_required = bool(candidate.get("login_required")) or access_quality == "login-required" or access_method == "login-required"
+    access_limited = bool(candidate.get("access_limited")) or access_quality in {
+        "partial-metadata",
+        "cache-archive",
+        "login-required",
+        "failed",
+    }
+
+    if volatile and not external_evidence:
+        total = cap_total(total, 79, "volatile social-only candidate without external evidence cannot exceed B", cap_reasons)
+    if missing_provenance:
+        total = cap_total(total, 64, "missing provenance cannot exceed C", cap_reasons)
+    if stale_fast_moving:
+        total = cap_total(total, 64, "stale fast-moving ecosystem candidate cannot exceed C", cap_reasons)
+    if human_impact_no_user_validation:
+        total = cap_total(total, 79, "human-impact candidate without user validation cannot exceed B", cap_reasons)
+    if sensitive_data_no_privacy_plan:
+        total = cap_total(total, 64, "sensitive-data candidate without privacy plan cannot exceed C", cap_reasons)
+    if project_idea_no_baseline_check:
+        total = cap_total(total, 79, "project idea without incumbent baseline check cannot exceed B", cap_reasons)
+    if reader_proxy_only and not external_evidence:
+        total = cap_total(total, 79, "reader-proxy-only candidate without independent evidence cannot exceed B", cap_reasons)
+    if browser_session_only and not external_evidence:
+        total = cap_total(total, 79, "browser-session-only candidate without independent evidence cannot exceed B", cap_reasons)
+    if metadata_only:
+        total = cap_total(total, 64, "metadata-only candidate cannot exceed C", cap_reasons)
+    if cache_archive_only and not bool(candidate.get("archive_research_target")):
+        total = cap_total(total, 64, "cache/archive-only candidate cannot exceed C unless the task is archival", cap_reasons)
+    if login_required:
+        total = cap_total(total, 64, "login-required candidate without readable body cannot exceed C", cap_reasons)
+    if access_limited:
+        total = cap_total(total, 64, "access-limited candidate cannot exceed C without stronger evidence", cap_reasons)
 
     return {
         **candidate,
+        "access_quality": access_quality or candidate.get("access_quality"),
+        "access_method": access_method or candidate.get("access_method"),
         "scores": scores,
         "total": round(total, 2),
         "grade": grade(total),

@@ -25,6 +25,85 @@ Optional adapters:
 
 If optional adapters are unavailable, do not block. Use public fallbacks, label the limitation, and avoid overclaiming freshness or social coverage. Do not request cookie exports or session-store access.
 
+## Access Capability Detection
+
+Before expensive scouting, infer the available access tier from the current session:
+
+- `universal`: shell/web search only; no logged-in browser, paid API, or browser automation required.
+- `enhanced`: Browser/Chrome/Playwright, logged-in social sessions, official social APIs, or paid search/scraping services are available.
+- `archive-rich`: local Threads/archive vault is available and should be searched before live scouting.
+
+Do not ask the user to choose a mode. Use enhanced adapters when already available, but keep the universal path working and report the access method for each serious candidate.
+
+## Public Web Access Ladder
+
+Use this ladder for a specific URL or web post that fails normal browsing, returns a login shell, or looks like an empty dynamic page. Stop as soon as content quality is sufficient for the task.
+
+1. `original`: direct fetch, web browsing, or official page access.
+2. `reader-proxy`: Jina Reader.
+   - Basic: `curl -s "https://r.jina.ai/http://example.com/path"`
+   - Preserve HTTPS when needed: `curl -s "https://r.jina.ai/http://https://example.com/path"`
+   - JSON metadata: `curl -H "Accept: application/json" "https://r.jina.ai/http://https://example.com/path"`
+   - Useful headers: `X-No-Cache: true`, `X-With-Links: true`, `X-Target-Selector: <selector>`, `X-Respond-With: text`.
+3. `public-api`: platform public endpoints, when the platform is known.
+4. `variant`: URL variants such as `.json`, `/rss`, `/feed`, mobile host (`www.` to `m.`), and `drop_www`.
+5. `metadata-only`: OGP, `meta description`, JSON-LD, Schema.org, and embedded Next.js/RSC payloads from any HTML response.
+6. `cache-archive`: AMP cache for news/media, archive.today, and Wayback Machine. Use only when original/public paths fail or the task is explicitly archival.
+7. `enhanced-browser`: logged-in Browser/Chrome/Playwright inspection, network request discovery, and session-backed page text.
+8. `access-limited`: if the content still cannot be read, keep only the URL, title/snippet/metadata, attempted methods, and limitation label.
+
+Validation rules:
+
+- HTTP 200 is not success by itself. Check that the body is not a login shell, challenge page, empty SPA, or generic profile wrapper.
+- Prefer full post/article text over title/snippet only.
+- Treat `reader-proxy`, `metadata-only`, `cache-archive`, and `enhanced-browser` as provenance, not proof of independent validation.
+- Record `access_method`, `access_quality`, and `provenance_note` for serious candidates.
+
+Suggested access quality values:
+
+| Quality | Meaning | Typical Placement |
+|---|---|---|
+| `full-original` | Original page/API/docs/repo directly available | Strong Finds possible |
+| `full-public-api` | Public endpoint gives structured content | Strong Finds possible |
+| `full-reader-proxy` | Reader proxy gives substantial text | Trending or Strong only with independent evidence |
+| `full-browser-session` | Logged-in/enhanced browser gives substantial text | Trending or Strong only with independent evidence |
+| `partial-metadata` | OGP/JSON-LD/snippet only | Access-Limited Leads |
+| `cache-archive` | Archive/cache copy only | Access-Limited unless archival task |
+| `login-required` | Relevant but blocked by auth/paywall/private state | Access-Limited Leads |
+| `failed` | No usable content | Rejected/Weak Signals |
+
+## Platform Public Endpoints
+
+Use platform endpoints before browser automation when they can answer the task.
+
+- Reddit: append `.json` to posts; use subreddit `hot.json`, `new.json`, `top.json`, and `search.json` with a mobile user agent.
+- Hacker News: Firebase item APIs and Algolia search.
+- X/Twitter: use web search for URL discovery, then `publish.twitter.com/oembed` for known posts; use syndication profile endpoint for recent public timeline checks when it still works.
+- Bluesky: AT Protocol public API.
+- Mastodon: instance public API.
+- YouTube/Vimeo/TikTok and other media: `yt-dlp --dump-json` when available; transcripts are stronger than titles.
+- GitHub, npm, PyPI, arXiv, CrossRef, OpenLibrary, Wikipedia: official public APIs.
+
+Use these endpoints as evidence sources, not just fetch helpers. Structured public API data usually outranks reader-proxy text.
+
+## Enhanced Browser Adapters
+
+Use Browser/Chrome/Playwright only when they are already available or the user explicitly asks for that path.
+
+Good uses:
+
+- Threads/X pages that reader-proxy or public search cannot reveal.
+- JS-heavy pages where reader-proxy returns only shell text.
+- Network request discovery for public JSON endpoints behind an SPA.
+- Logged-in pages the user intentionally wants inspected.
+
+Rules:
+
+- Do not request cookie exports or inspect session stores.
+- Do not make browser automation a hard requirement for RadarX.
+- Label browser-derived results with `full-browser-session` or `partial-browser-session`.
+- If a browser result materially affects a recommendation, try to corroborate it with official docs, GitHub, public API, Reddit/HN, YouTube, or another non-session source.
+
 ## Archive
 
 Use `threads-archive` or the synced vault first when present.
@@ -150,6 +229,14 @@ Examples: SocialCrawl, ScrapeCreators, SerpAPI, Tavily, Exa, Brave Search API, o
 Use only when available or explicitly requested. In reports, label setup friction and cost. Do not make paid access a hard dependency for the skill.
 
 ## Reference Implementations
+
+`fivetaku/insane-search` is the main reference for blocked-page access strategy. Borrow its public access ladder, validation discipline, and provenance thinking, not its full bypass engine:
+
+- Keep RadarX dependency-light; do not require installing `insane-search`.
+- Preserve the idea that HTTP 200 is not success until content is validated.
+- Prefer public endpoints, reader-proxy, RSS/feed, metadata, cache/archive, and optional browser escalation in that order.
+- Avoid site-name hardcoding in reusable rules; keep site-specific hints in the current run only.
+- Do not turn RadarX into a general WAF bypass tool.
 
 `mvanhorn/last30days-skill` is a strong reference for multi-source social research, engagement-aware scoring, source fan-out, and brief synthesis. Treat it as inspiration, not a default dependency:
 

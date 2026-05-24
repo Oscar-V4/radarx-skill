@@ -7,13 +7,15 @@
 </p>
 
 **RadarX 是一个雷达型研究 Skill，用来发现最新的 AI、开源、社交和社区信号。**  
-它会扫描 Threads、X、Reddit、Hacker News、GitHub、YouTube、Hugging Face、arXiv、Product Hunt 和网页等 live sources，同时过滤弱 hype，只报告有价值、有证据的候选。
+它会扫描 Threads、X、Reddit、Hacker News、GitHub、YouTube、Hugging Face、arXiv、Product Hunt 和网页等 live sources，并通过公开访问阶梯和 provenance 标签，把已验证推荐与较弱但值得关注的趋势信号分开。
 
 - 寻找最新 AI 工具、开源项目、agentic workflow、best practice 和项目 idea 信号。
 - 如果有本地 Threads archive，会先建立连接，并把 archive context 与 live evidence 分开标注。
 - 分层使用 GitHub、官方文档、Reddit/HN、YouTube、arXiv、Hugging Face、Product Hunt 和网页搜索。
+- 普通浏览失败时，会依次尝试 reader-proxy、public APIs、RSS/feed、metadata、cache/archive 和可选 browser session。
 - 按相关性、证据、freshness、新颖性、采用信号和安全性给候选打分。
-- 对只有社交热度、缺少独立证据的候选降级。
+- 将 social-only、reader-proxy-only、metadata-only、cache/archive 和 login-required 线索与强推荐分开。
+- 使用 access-quality cap，避免访问路径较弱的材料被过度推荐。
 - 对项目 idea 研究，会扩展到现有替代方案、MVP 路径、评估计划和风险门槛。
 
 ## 快速安装
@@ -64,8 +66,10 @@ RadarX 通常会返回：
 - **Intent**：问题和好候选的标准
 - **Attention Mode**：quick、balanced、deep、social-heavy 或 archive-first
 - **Archive Connections**：相关 archive context
+- **Access Coverage**：archive、public web、reader-proxy、public API、browser session 或 paid API 的可用范围
 - **Strong Finds**：有来源支撑的候选和 URL
-- **Volatile Social Signals**：仍需验证的 live/social 信号
+- **Trending Signals**：新鲜、高相关但验证仍弱的信号
+- **Access-Limited Leads**：部分正文、reader-proxy-only、metadata-only、cache/archive 或 login-required 线索
 - **Rejected Or Weak Signals**：被忽略的内容和原因
 - **Next Searches**：下一步要搜索的 query、社区、文档或作者
 
@@ -77,6 +81,8 @@ RadarX 通常会返回：
 
 ## 使用条件
 
-RadarX 的正常使用不需要 X/Threads 登录、Playwright、browser-use、Chrome 自动化或付费 scraping API。它会优先使用公开证据，并把登录、付费、浏览器依赖来源当作可选 adapter。
+RadarX 的正常使用不需要 X/Threads 登录、Playwright、browser-use、Chrome 自动化或付费 scraping API。它会优先使用公开证据，并把登录、付费、浏览器依赖来源当作可选 enhanced adapter。
+
+如果当前环境有浏览器插件或登录 session，RadarX 可以检查更多 live/social 内容，但结果仍应带有 `access_method`、`access_quality` 和 `provenance_note` 标签。
 
 不要为了使用 RadarX 导出 cookie 或 token。如果某个来源不可用，skill 应说明限制，并继续使用公开 fallback evidence。
